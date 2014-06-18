@@ -51,6 +51,7 @@ class AbstractAppDirectory(object):
     def num_pages(self):
         pass
 
+
 class AbstractAppDetail(object):
     __metaclass__ = ABCMeta
 
@@ -70,12 +71,11 @@ class AbstractAppDetail(object):
 
     def visit(self):
         values = {}
+        # Call each function prefixed with g_. These return info on the app
         for func in inspect.getmembers(self, predicate=inspect.ismethod):
             if "g_" in func[0]:
                 function_name = func[0][2:] # Strip g_ prefix from function name
                 values[function_name] = func[1]()
-        #   if isinstance(attr_value, types.FunctionType):
-        #        print attr_value
         return values
 
     def g_app_detail_url(self):
