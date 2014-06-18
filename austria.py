@@ -125,36 +125,3 @@ class AustriaAppDetail(AbstractAppDetail):
                     data_sources.append(data_source)
         
         return data_sources
-
-"""
-listing_url = AustriaAppDirectory.listing_url() + "1"
-page = requests.get(listing_url).text
-soup = BeautifulSoup(page)
-aad = AustriaAppDirectory(soup)
-
-pp = pprint.PrettyPrinter(indent = 2)
-
-for url in aad.detail_urls():
-    print url
-    app = AustriaAppDetail(url)
-    pp.pprint(app.visit())
-    print "\n"
-"""
-
-t = TabWriter("output.tab")
-t.write_headers()
-
-for page in range(1, AustriaAppDirectory.num_pages()+1):
-    listing_url = AustriaAppDirectory.listing_url() + str(page)
-    page = requests.get(listing_url).text
-    soup = BeautifulSoup(page)
-    aad = AustriaAppDirectory(soup)
-    for url in aad.detail_urls():
-        print url
-        app = AustriaAppDetail(url)
-        t.write_row(app)
-        time.sleep(2)
-
-
-#app1 = AustriaAppDetail("foo", soup)
-#print app1.visit()
