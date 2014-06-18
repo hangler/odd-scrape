@@ -12,7 +12,7 @@ class AustriaAppDirectory(AbstractAppDirectory):
     def num_pages(self):
         return 25
 
-    def detail_urls(self, page=1):
+    def detail_urls(self):
         detail_pages = []
         for row in self.soup.find('ul', {'class': 'entryAnwendungen'}).findAll('li'):
             detail_url = row.find('a').get('href')
@@ -26,22 +26,11 @@ class AustriaAppDetail(AbstractAppDetail):
 
     def g_title(self):
         return self.soup.find('h1', {'class': 'nomargin'}).find('span').text
-   
-    """
-    This actually finds the creator's URL.
-    def g_url(self):
-        for h3 in self.soup.find('div', {'id': 'contentSidebar'}).findAll('h3'):
-            if "Kontakt" in h3.text:
-                for item in h3.next_siblings:
-                    if item.name is not None and "p" in item.name:
-                        return item.find('a').get('href')
-    """
 
     def g_url(self):
         return self.soup.find('a', {'class': 'buttonBlue'}).get('href')
 
     def g_summary(self):
-        summary = ""
         first_para = self.soup.find('div', {'class': 'contentText'}).find('p')
         summary = first_para.text
         for item in first_para.next_siblings:
@@ -132,7 +121,7 @@ class AustriaAppDetail(AbstractAppDetail):
                     index_of_first_parenthesis = link_text.find("(")
                     name = link_text[:index_of_first_parenthesis]
                     source = link_text[index_of_first_parenthesis+1:-1]
-                    data_source = DataSource(name, country="Austria", url=url, organization=source)
+                    data_source = DataSource(name, country=self.g_country(), url=url, organization=source)
                     data_sources.append(data_source)
         
         return data_sources

@@ -3,6 +3,11 @@ from bs4 import BeautifulSoup
 import inspect
 import requests
 
+def xstr(s):
+    if s is None:
+        return ''
+    return s
+
 class Developer(object):
 
     def __init__(self, is_organization, name, country=None, email=None, homepage=None):
@@ -15,6 +20,7 @@ class Developer(object):
     def __unicode__(self):
         return u"[%s, %s (%s, %s)]" % (self.name, self.country, self.email, self.homepage)
 
+
 class DataSource(object):
 
     def __init__(self, name, country=None, url=None, organization=None, description=None):
@@ -25,7 +31,7 @@ class DataSource(object):
         self.description = description
 
     def __unicode__(self):
-        return u"[%s (%s, %s) %s]" % (self.name, self.organization, self.country, self.url)
+        return u"[%s (%s, %s) %s]" % (self.name, xstr(self.organization), self.country, self.url)
 
 class AbstractAppDirectory(object):
     __metaclass__ = ABCMeta
@@ -71,6 +77,9 @@ class AbstractAppDetail(object):
         #   if isinstance(attr_value, types.FunctionType):
         #        print attr_value
         return values
+
+    def g_app_detail_url(self):
+        return self.page_url
 
     @abstractmethod
     def g_title(self):
